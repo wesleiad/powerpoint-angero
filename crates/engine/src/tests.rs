@@ -1119,18 +1119,18 @@ fn an_embedded_face_is_used_when_the_machine_lacks_it() {
     let mut p = deckcraft_model::Presentation::default();
     let slide = std::sync::Arc::make_mut(&mut p.slides[0]);
     let mut body = deckcraft_model::text::TextBody::from_text("Hello");
-    body.paragraphs[0].runs[0].props.font = Some("DeckCraft Colr Squares".into());
+    body.paragraphs[0].runs[0].props.font = Some("PowerPoint Colr Squares".into());
     slide.shapes[0].text = Some(body);
     let id = p
         .add_media("font1.fntdata", "application/x-fontdata", include_bytes!("../../render/tests/fixtures/colr-squares.ttf").to_vec())
         .expect("media");
-    p.embedded_fonts.push(deckcraft_model::EmbeddedFont { typeface: "DeckCraft Colr Squares".into(), regular: Some(id), ..Default::default() });
+    p.embedded_fonts.push(deckcraft_model::EmbeddedFont { typeface: "PowerPoint Colr Squares".into(), regular: Some(id), ..Default::default() });
     let data = crate::cmd::base64_encode(&crate::cmd::file::save_bytes(&p, "pptx").unwrap());
     let mut s = Session::with_new();
     let r = s.execute("file.openBytes", &json!({"name": "fonts.pptx", "data": data})).unwrap();
     assert_eq!(r["missingFonts"], json!([]));
     let font = s.doc().unwrap().doc.embedded_fonts.first().unwrap();
-    assert_eq!(font.typeface, "DeckCraft Colr Squares");
+    assert_eq!(font.typeface, "PowerPoint Colr Squares");
     assert!(font.regular.is_some());
 }
 
@@ -3149,8 +3149,8 @@ fn autocorrect_options_as_you_type() {
     s.execute("text.autocorrect", &json!({"sentenceCaps": false, "days": false})).unwrap();
     assert_eq!(typed(&mut s, "hello monday "), "hello monday ");
     // Your own entries, and deleting a built-in one.
-    s.execute("text.autocorrect", &json!({"add": ["dc", "DeckCraft"], "remove": "teh"})).unwrap();
-    assert_eq!(typed(&mut s, "dc teh "), "DeckCraft teh ");
+    s.execute("text.autocorrect", &json!({"add": ["dc", "PowerPoint"], "remove": "teh"})).unwrap();
+    assert_eq!(typed(&mut s, "dc teh "), "PowerPoint teh ");
     let v = s.execute("text.autocorrect", &json!({})).unwrap();
     let entries = v["entries"].as_array().unwrap();
     assert!(entries.iter().any(|e| e[0] == "dc"));
@@ -3336,7 +3336,7 @@ fn the_caret_takes_the_colour_of_the_text() {
         empty
     };
     // Dark text on the light theme, light text on the dark one: never black on a dark slide.
-    let (light, dark) = (caret("DeckCraft"), caret("Nocturne"));
+    let (light, dark) = (caret("PowerPoint"), caret("Nocturne"));
     assert!(light.r < 0x60 && light.g < 0x60 && light.b < 0x60, "{light:?}");
     assert!(dark.r > 0xC0 && dark.g > 0xC0 && dark.b > 0xC0, "{dark:?}");
     // Text set to red gets a red caret.

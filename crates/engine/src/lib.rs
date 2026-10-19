@@ -759,7 +759,9 @@ pub(crate) fn push_undo(st: &mut DocState, e: HistoryEntry) {
     // Memory too: drop the oldest steps while the kept ones pass the budget (the newest always
     // stays, however big). A deck-wide edit keeps a copy of every slide, so 500 of them on a big
     // deck could hold hundreds of copies.
-    let budget = if h.byte_limit == 0 { UNDO_BYTE_BUDGET } else { h.byte_limit };
+    // Office Angerô: em PC com pouca RAM o desfazer guarda um quarto (64 MB)
+    let padrao = if std::env::var("POWERPOINT_ANGERO_MEMORIA").is_ok_and(|v| v == "baixa") { UNDO_BYTE_BUDGET / 4 } else { UNDO_BYTE_BUDGET };
+    let budget = if h.byte_limit == 0 { padrao } else { h.byte_limit };
     let cost = |h: &History, e: &HistoryEntry| h.costs.get(&(Arc::as_ptr(&e.doc) as usize)).copied().unwrap_or(0);
     let mut total: usize = h.undo.iter().map(|e| cost(h, e)).sum();
     let mut drop = 0;

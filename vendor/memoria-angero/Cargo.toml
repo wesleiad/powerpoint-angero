@@ -1,0 +1,7 @@
+[package]
+name = "memoria-angero"
+version = "0.1.0"
+edition = "2024"
+license = "MIT OR Apache-2.0"
+description = "Office Angerô: RAM total do Windows e variável de ambiente no início do programa (fora do forbid(unsafe_code) do workspace)"
+publish = false

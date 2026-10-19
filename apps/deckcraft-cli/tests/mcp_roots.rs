@@ -1,4 +1,4 @@
-//! `deckcraft-cli mcp` with the automation root flags, run as the real binary.
+//! `powerpoint-angero-cli mcp` with the automation root flags, run as the real binary.
 // Integration tests: unwrapping and panicking on failure is fine here, unlike in shipped code (AGENTS.md).
 #![allow(clippy::unwrap_used, clippy::expect_used, clippy::panic)]
 
@@ -23,7 +23,7 @@ fn tmpdir(tag: &str) -> PathBuf {
     dir
 }
 
-/// Send `calls` (tool name, arguments) to `deckcraft-cli mcp <args>`; returns whether it exited
+/// Send `calls` (tool name, arguments) to `powerpoint-angero-cli mcp <args>`; returns whether it exited
 /// cleanly, its stderr, and the stdout lines after `initialize`, one per call.
 fn mcp_session(args: &[&str], calls: &[(&str, Value)]) -> (bool, String, Vec<Value>) {
     let mut child = bin().arg("mcp").args(args).stdin(Stdio::piped()).stdout(Stdio::piped()).stderr(Stdio::piped()).spawn().unwrap();

@@ -35,8 +35,10 @@ pub fn big_button(ui: &mut Ui, icon: Icon, label: &str, enabled: bool) -> Respon
 pub fn big_button_ex(ui: &mut Ui, icon: Icon, label: &str, enabled: bool, split: bool, selected: bool) -> (Response, Option<Response>) {
     let t = Tokens::get(ui.ctx());
     let font = theme::font(11.0);
-    let lines: Vec<&str> = wrap_label(label);
-    let text_w = lines.iter().map(|l| ui.fonts_mut(|f| f.layout_no_wrap(l.to_string(), font.clone(), t.text).size().x)).fold(0.0f32, f32::max);
+    // Office Angerô: traduz o rótulo inteiro antes de quebrar em linhas ("Quick Styles" vira "Estilos Rápidos")
+    let traduzido = egui::traducao::traduzir(label.to_string());
+    let lines: Vec<&str> = wrap_label(&traduzido);
+    let text_w = lines.iter().map(|l| ui.fonts_mut(|f| f.layout_no_wrap(egui::traducao::traduzir(l.to_string()), font.clone(), t.text).size().x)).fold(0.0f32, f32::max);
     let w = (text_w + 10.0 + if split && lines.len() == 1 { 10.0 } else { 0.0 }).max(40.0);
     let (rect, resp) = ui.allocate_exact_size(vec2(w, RIBBON_H - 2.0), if enabled { Sense::click() } else { Sense::hover() });
     // Named for screen readers and UI tests ("Ink to\nShape" reads "Ink to Shape").
@@ -65,7 +67,7 @@ pub fn big_button_ex(ui: &mut Ui, icon: Icon, label: &str, enabled: bool, split:
     let mut y = rect.min.y + 39.0;
     for (i, l) in lines.iter().enumerate() {
         let last = i + 1 == lines.len();
-        let label_w = ui.fonts_mut(|f| f.layout_no_wrap(l.to_string(), font.clone(), col).size().x);
+        let label_w = ui.fonts_mut(|f| f.layout_no_wrap(egui::traducao::traduzir(l.to_string()), font.clone(), col).size().x);
         let extra = if split && last { 9.0 } else { 0.0 };
         let x = rect.center().x - (label_w + extra) / 2.0;
         painter.text(pos2(x, y), Align2::LEFT_TOP, l, font.clone(), col);
@@ -116,7 +118,7 @@ pub fn small_button(ui: &mut Ui, icon: Icon, label: &str, enabled: bool, selecte
 pub fn small_button_ex(ui: &mut Ui, icon: Icon, label: &str, enabled: bool, selected: bool, split: bool) -> (Response, Option<Response>) {
     let t = Tokens::get(ui.ctx());
     let font = theme::font(12.0);
-    let tw = if label.is_empty() { 0.0 } else { ui.fonts_mut(|f| f.layout_no_wrap(label.to_string(), font.clone(), t.text).size().x) + 5.0 };
+    let tw = if label.is_empty() { 0.0 } else { ui.fonts_mut(|f| f.layout_no_wrap(egui::traducao::traduzir(label.to_string()), font.clone(), t.text).size().x) + 5.0 };
     let arrow_w = if split { 12.0 } else { 0.0 };
     let w = 24.0 + tw + arrow_w;
     let (rect, resp) = ui.allocate_exact_size(vec2(w, 22.0), if enabled { Sense::click() } else { Sense::hover() });
@@ -157,7 +159,7 @@ pub fn small_button_ex(ui: &mut Ui, icon: Icon, label: &str, enabled: bool, sele
 pub fn check_item(ui: &mut Ui, label: &str, enabled: bool, on: bool) -> Response {
     let t = Tokens::get(ui.ctx());
     let font = theme::font(12.0);
-    let tw = ui.fonts_mut(|f| f.layout_no_wrap(label.to_string(), font.clone(), t.text).size().x) + 5.0;
+    let tw = ui.fonts_mut(|f| f.layout_no_wrap(egui::traducao::traduzir(label.to_string()), font.clone(), t.text).size().x) + 5.0;
     let (rect, resp) = ui.allocate_exact_size(vec2(24.0 + tw, 22.0), if enabled { Sense::click() } else { Sense::hover() });
     resp.widget_info(|| egui::WidgetInfo::selected(egui::WidgetType::Checkbox, enabled, on, label));
     let painter = ui.painter_at(rect);

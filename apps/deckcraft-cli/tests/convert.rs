@@ -1,4 +1,4 @@
-//! `deckcraft-cli convert` writes the format OUT's extension names, or fails without writing.
+//! `powerpoint-angero-cli convert` writes the format OUT's extension names, or fails without writing.
 
 use std::path::{Path, PathBuf};
 use std::process::{Command, Output};

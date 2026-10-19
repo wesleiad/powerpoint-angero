@@ -5,7 +5,7 @@ edition.workspace = true
 license.workspace = true
 description = "DeckCraft desktop app"
 publish = false
-default-run = "deckcraft"
+default-run = "powerpoint-angero"
 
 [lints]
 workspace = true
@@ -18,6 +18,8 @@ eframe = { workspace = true, features = ["default_fonts", "wgpu", "accesskit", "
 egui = { workspace = true }
 serde_json = { workspace = true }
 log = { workspace = true }
+zip = { workspace = true }  # Office Angerô: atualização automática
+memoria-angero = { path = "../../vendor/memoria-angero" }  # Office Angerô: modo leve
 
 [build-dependencies]
 # Icon + VERSIONINFO for deckcraft.exe; build.rs only uses it when the target is Windows.
@@ -31,3 +33,7 @@ cpal = "0.16"
 
 [target.'cfg(all(unix, not(target_os = "macos")))'.dependencies]
 winit = { version = "0.30", default-features = false, features = ["x11"] }
+
+[[bin]]
+name = "powerpoint-angero"
+path = "src/main.rs"

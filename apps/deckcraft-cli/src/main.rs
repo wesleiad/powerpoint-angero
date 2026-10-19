@@ -1,4 +1,4 @@
-//! Headless DeckCraft. `deckcraft-cli help` explains each subcommand (`help.rs`).
+//! Headless DeckCraft. `powerpoint-angero-cli help` explains each subcommand (`help.rs`).
 #![deny(clippy::unwrap_used, clippy::expect_used, clippy::panic, clippy::unimplemented, clippy::todo, clippy::unreachable)]
 #![forbid(unsafe_code)]
 
@@ -18,7 +18,7 @@ macro_rules! outln {
             if e.kind() == std::io::ErrorKind::BrokenPipe {
                 std::process::exit(0);
             }
-            eprintln!("deckcraft-cli: can't write to stdout: {e}");
+            eprintln!("powerpoint-angero-cli: can't write to stdout: {e}");
             std::process::exit(1);
         }
     }};
@@ -47,7 +47,7 @@ fn main() -> ExitCode {
             },
         },
         Some("--version" | "-V" | "version") => {
-            outln!("deckcraft-cli {}", env!("CARGO_PKG_VERSION"));
+            outln!("powerpoint-angero-cli {}", env!("CARGO_PKG_VERSION"));
             ExitCode::SUCCESS
         }
         Some("info") => report(info(rest)),
@@ -74,7 +74,7 @@ fn main() -> ExitCode {
         Some("mcp") => report(mcp(rest)),
         Some("links") => {
             use deckcraft_engine::links::*;
-            outln!("Discord   {DISCORD}\nWebsite   {WEBSITE}\nApp page  {APP_PAGE}\nGitHub    {GITHUB}");
+            outln!("Office Angerô  {WEBSITE}\nAjuda         {APP_PAGE}\nGitHub        {GITHUB}");
             ExitCode::SUCCESS
         }
         Some(other) => unknown(other),
@@ -92,13 +92,13 @@ fn help_page(name: &str) -> String {
 }
 
 fn unknown(sub: &str) -> ExitCode {
-    eprintln!("deckcraft-cli: unknown subcommand `{sub}`\n");
+    eprintln!("powerpoint-angero-cli: unknown subcommand `{sub}`\n");
     usage()
 }
 
 fn usage() -> ExitCode {
     eprintln!("{}", help::overview());
-    eprintln!("\nCommunity: {}  ·  {}", deckcraft_engine::links::DISCORD, deckcraft_engine::links::APP_PAGE);
+    eprintln!("\nAjuda: {}", deckcraft_engine::links::APP_PAGE);
     ExitCode::FAILURE
 }
 
@@ -106,7 +106,7 @@ fn report(r: Result<(), String>) -> ExitCode {
     match r {
         Ok(()) => ExitCode::SUCCESS,
         Err(e) => {
-            eprintln!("deckcraft-cli: {e}");
+            eprintln!("powerpoint-angero-cli: {e}");
             ExitCode::FAILURE
         }
     }
@@ -131,10 +131,10 @@ fn warn_if_damaged(path: &str, opened: &serde_json::Value) {
     let count = |key: &str| opened.get(key).and_then(|v| v.as_array()).map_or(0, |a| a.len());
     let (slides, media) = (count("lostSlides"), count("damagedMedia"));
     if slides > 0 {
-        eprintln!("deckcraft-cli: warning: {path}: {slides} slide{} couldn't be read and left out", if slides == 1 { "" } else { "s" });
+        eprintln!("powerpoint-angero-cli: warning: {path}: {slides} slide{} couldn't be read and left out", if slides == 1 { "" } else { "s" });
     }
     if media > 0 {
-        eprintln!("deckcraft-cli: warning: {path}: {media} picture or media file{} couldn't be read", if media == 1 { "" } else { "s" });
+        eprintln!("powerpoint-angero-cli: warning: {path}: {media} picture or media file{} couldn't be read", if media == 1 { "" } else { "s" });
     }
 }
 
@@ -543,7 +543,7 @@ fn describe(id: Option<&str>) -> Result<(), String> {
     }
     let bare = params.is_empty() || params.iter().any(|p| params.iter().filter(|q| q.object == p.object).all(|q| q.optional));
     let call = if bare { c.id.to_string() } else { format!("'{}={{…}}'", c.id) };
-    outln!("\nRun it with: deckcraft-cli run --cmd {call}");
+    outln!("\nRun it with: powerpoint-angero-cli run --cmd {call}");
     Ok(())
 }
 
@@ -588,7 +588,7 @@ fn app(args: &[String]) -> Result<(), String> {
         }
     }
     let mut r = Remote::connect(&control_addr(&port))
-        .map_err(|e| format!("no DeckCraft app on port {port} ({e}); start it with `deckcraft --control {port}`"))?;
+        .map_err(|e| format!("no PowerPoint app on port {port} ({e}); start it with `deckcraft --control {port}`"))?;
     let parse = |s: Option<&String>| -> Result<Value, String> {
         s.map(|j| serde_json::from_str(j).map_err(|e| format!("bad JSON: {e}"))).transpose().map(|v| v.unwrap_or(json!({})))
     };
@@ -642,7 +642,7 @@ so drop --connect (or use --connect without the roots)"
                 // Every thread of this process, not only the server's: nothing reaches past the roots.
                 file_access::confine_process(roots.clone());
                 let show = |root: Option<&std::path::Path>| root.map_or_else(|| "none".to_string(), |r| r.display().to_string());
-                eprintln!("deckcraft-cli: files confined: read root {}, write root {}", show(roots.read_root()), show(roots.write_root()));
+                eprintln!("powerpoint-angero-cli: files confined: read root {}, write root {}", show(roots.read_root()), show(roots.write_root()));
                 h = h.with_automation_roots(Some(roots));
             }
             Box::new(h)

@@ -7,7 +7,22 @@ use std::sync::{Arc, Mutex};
 use deckcraft_model::style::PictureAdjust;
 use vello_cpu::Pixmap;
 
-const BUDGET: usize = 512 << 20;
+const BUDGET_NORMAL: usize = 512 << 20;
+
+/// Office Angerô: em PC com pouca RAM (`POWERPOINT_ANGERO_MEMORIA=baixa`, definido pelo app ao abrir)
+/// os caches de imagem ficam com um quarto do tamanho.
+fn memoria_baixa() -> bool {
+    static BAIXA: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+    *BAIXA.get_or_init(|| std::env::var("POWERPOINT_ANGERO_MEMORIA").is_ok_and(|v| v == "baixa"))
+}
+
+fn budget() -> usize {
+    if memoria_baixa() { BUDGET_NORMAL / 4 } else { BUDGET_NORMAL }
+}
+
+fn gif_cache_budget() -> usize {
+    if memoria_baixa() { GIF_CACHE_BUDGET / 4 } else { GIF_CACHE_BUDGET }
+}
 
 /// Largest straight-RGBA picture a decode may produce (bytes, 4 per pixel). Checked from the
 /// header before decoding and again before the conversion to RGBA, which the decoder's own
@@ -355,7 +370,7 @@ pub fn decode_for(bytes: &Arc<Vec<u8>>, want: f64, adj: &PictureAdjust) -> Optio
         let n = w as usize * h as usize * 4;
         c.bytes += n;
         c.map.insert(key, Entry { _bytes: bytes.clone(), pm: pm.clone(), stamp: c.clock });
-        while c.bytes > BUDGET && c.map.len() > 1 {
+        while c.bytes > budget() && c.map.len() > 1 {
             let Some(oldest) = c.map.iter().min_by_key(|(_, e)| e.stamp).map(|(k, _)| *k) else { break };
             if let Some(e) = c.map.remove(&oldest) {
                 c.bytes = c.bytes.saturating_sub(e.pm.width() as usize * e.pm.height() as usize * 4);
@@ -428,7 +443,7 @@ fn anim(bytes: &Arc<Vec<u8>>, adj: &PictureAdjust) -> Option<Arc<Anim>> {
     let a = decode_anim(bytes, adj).map(Arc::new);
     with(|c| {
         let held: usize = c.anims.values().filter_map(|e| e.1.as_ref()).map(|a| a.bytes()).sum();
-        if held + a.as_ref().map_or(0, |a| a.bytes()) > GIF_CACHE_BUDGET || c.anims.len() >= 64 {
+        if held + a.as_ref().map_or(0, |a| a.bytes()) > gif_cache_budget() || c.anims.len() >= 64 {
             c.anims.clear();
         }
         c.anims.insert(key, (bytes.clone(), a.clone()));

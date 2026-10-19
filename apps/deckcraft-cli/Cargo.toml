@@ -10,7 +10,7 @@ publish = false
 workspace = true
 
 [[bin]]
-name = "deckcraft-cli"
+name = "powerpoint-angero-cli"
 path = "src/main.rs"
 
 [dependencies]

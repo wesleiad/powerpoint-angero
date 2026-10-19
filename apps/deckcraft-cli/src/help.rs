@@ -15,7 +15,7 @@ notes, transition), its layouts, theme fonts, sections and slide size.
 
 The shapes of one slide, with their ids, boxes and text, come from the slide.inspect command:
 
-  deckcraft-cli run --in deck.deckcraft --print --cmd 'slide.inspect={\"index\":0}'",
+  powerpoint-angero-cli run --in deck.deckcraft --print --cmd 'slide.inspect={\"index\":0}'",
     },
     Subcommand {
         name: "render",
@@ -30,7 +30,7 @@ slide. Prints each image's path and size.
   --edit           draw what the editor shows: placeholder prompts and their dashed outlines
   --transparent    leave the slide background out, so only what is on the slide is drawn
 
-  deckcraft-cli render deck.deckcraft --slide 2 slide-3.png",
+  powerpoint-angero-cli render deck.deckcraft --slide 2 slide-3.png",
     },
     Subcommand {
         name: "render-transition",
@@ -44,7 +44,7 @@ OUT-t0.250.png and so on. Prints each image's path, size, transition and time.
   --t T,T...   the times to draw, comma-separated
   --width PX   the image width in pixels, twice the slide width in points by default
 
-  deckcraft-cli render-transition deck.deckcraft --slide 1 --t 0.25,0.5,0.75 fade.png",
+  powerpoint-angero-cli render-transition deck.deckcraft --slide 1 --t 0.25,0.5,0.75 fade.png",
     },
     Subcommand {
         name: "convert",
@@ -54,7 +54,7 @@ OUT-t0.250.png and so on. Prints each image's path, size, transition and time.
 .deckcraft, .pptx, .pdf, .txt or .md for the outline, .png or .jpg for the first slide, .gif for an
 animated GIF with one frame per slide. Other extensions are refused. Prints OUT.
 
-  deckcraft-cli convert deck.deckcraft deck.pptx",
+  powerpoint-angero-cli convert deck.deckcraft deck.pptx",
     },
     Subcommand {
         name: "run",
@@ -66,18 +66,18 @@ everything; .pptx, .pdf and .md (the outline) are written as convert writes them
 current slide as .png or .jpg, or the presentation as .pdf, .pptx or an animated .gif (one frame per
 slide). --export-params passes file.export options as one JSON object, such as
 '{\"width\": \"large\", \"secondsPerSlide\": 3, \"loop\": false, \"slides\": [0, 1, 2]}' for a GIF
-(`deckcraft-cli describe file.export` lists them).
+(`powerpoint-angero-cli describe file.export` lists them).
 
 Each --cmd is one command: COMMAND is a command id, then `=`, then the command's parameters as one
 JSON object. Quote it for the shell. A command that needs no parameters is just its id.
 
-  deckcraft-cli run \\
+  powerpoint-angero-cli run \\
     --cmd 'slide.new={\"layout\":\"titleOnly\",\"title\":\"Q3 results\"}' \\
     --cmd 'shape.insert={\"preset\":\"roundRect\",\"rect\":[80,160,320,120],\"text\":\"Revenue\"}' \\
     --cmd 'format.size={\"size\":28}' \\
     --save q3.deckcraft
 
-`deckcraft-cli commands` lists the command ids; `deckcraft-cli describe COMMAND` explains one and its
+`powerpoint-angero-cli commands` lists the command ids; `powerpoint-angero-cli describe COMMAND` explains one and its
 parameters.
 
 What the ids don't say:
@@ -88,7 +88,7 @@ What the ids don't say:
 - Shape ids are looked up on the current slide only.
 - A command that adds a shape (shape.insert, insert.textBox, insert.table…) selects it. format.* acts
   on the selected text or shapes; edit.select {\"ids\": [...]} selects others. Many shape commands
-  take the ids directly; `deckcraft-cli describe COMMAND` says what a command acts on.
+  take the ids directly; `powerpoint-angero-cli describe COMMAND` says what a command acts on.
 
 If a command fails, run stops there and saves nothing. --print shows each command's answer, such as
 the id of an inserted shape.",
@@ -100,10 +100,10 @@ the id of an inserted shape.",
         details: "Lists the commands that run --cmd, app and the MCP server take, one per line: the id, its name in
 the app and its parameters. FILTER keeps the commands whose id or name contains it, ignoring case.
 
-  deckcraft-cli commands format.
+  powerpoint-angero-cli commands format.
 
 In the parameters, `?` marks an optional one, a spaced ` | ` separates alternatives and `→` shows what
-the command answers. `deckcraft-cli describe COMMAND` spells one command out.",
+the command answers. `powerpoint-angero-cli describe COMMAND` spells one command out.",
     },
     Subcommand {
         name: "describe",
@@ -112,18 +112,18 @@ the command answers. `deckcraft-cli describe COMMAND` spells one command out.",
         details: "Explains one command: what it is in the app, each of its parameters, what it answers, and how run
 calls it.
 
-  deckcraft-cli describe shape.insert",
+  powerpoint-angero-cli describe shape.insert",
     },
     Subcommand {
         name: "app",
         usage: "app [--port PORT] COMMAND [PARAMS] | --method METHOD [PARAMS]",
-        summary: "run a command in the DeckCraft app started with --control",
+        summary: "run a command in the PowerPoint app started with --control",
         details: "Sends one request to the DeckCraft app started with `deckcraft --control PORT` (port 7979 by default)
 and prints its answer as JSON. COMMAND [PARAMS] runs a command, as run --cmd does; --method METHOD
 [PARAMS] calls a control-channel method such as ui.screenshot. PARAMS is a JSON object.
 
-  deckcraft-cli app shape.insert '{\"preset\":\"star5\",\"rect\":[100,100,200,200]}'
-  deckcraft-cli app --method ui.screenshot '{\"path\":\"/tmp/shot.png\"}'",
+  powerpoint-angero-cli app shape.insert '{\"preset\":\"star5\",\"rect\":[100,100,200,200]}'
+  powerpoint-angero-cli app --method ui.screenshot '{\"path\":\"/tmp/shot.png\"}'",
     },
     Subcommand {
         name: "mcp",
@@ -146,15 +146,15 @@ app is not confined by them).",
 save as .deckcraft and .pptx, to reopen as .pptx and to export as .pdf, and the peak memory. Prints the
 median and slowest of N runs (5 by default, 1 to 1000) as a table, or as JSON with --json.
 
-  deckcraft-cli bench deck.pptx --runs 10",
+  powerpoint-angero-cli bench deck.pptx --runs 10",
     },
     Subcommand {
         name: "links",
         usage: "links",
-        summary: "print the DeckCraft community and project links",
-        details: "Prints the DeckCraft community and project links.",
+        summary: "print the PowerPoint community and project links",
+        details: "Prints the PowerPoint community and project links.",
     },
-    Subcommand { name: "version", usage: "--version", summary: "print the version", details: "Prints the version of deckcraft-cli." },
+    Subcommand { name: "version", usage: "--version", summary: "print the version", details: "Prints the version of powerpoint-angero-cli." },
 ];
 
 pub fn page(name: &str) -> Option<String> {
@@ -163,7 +163,7 @@ pub fn page(name: &str) -> Option<String> {
         "--version" | "-V" => "version",
         name => name,
     };
-    SUBCOMMANDS.iter().find(|s| s.name == name).map(|s| format!("usage: deckcraft-cli {}\n\n{}", s.usage, s.details))
+    SUBCOMMANDS.iter().find(|s| s.name == name).map(|s| format!("usage: powerpoint-angero-cli {}\n\n{}", s.usage, s.details))
 }
 
 pub fn overview() -> String {
@@ -171,16 +171,16 @@ pub fn overview() -> String {
     let list: Vec<String> =
         SUBCOMMANDS.iter().map(|s| format!("  {:<width$}  {}", s.usage.split(' ').next().unwrap_or_default(), s.summary)).collect();
     format!(
-        "deckcraft-cli works on DeckCraft presentations (.deckcraft, .pptx) without a window.
+        "powerpoint-angero-cli works on DeckCraft presentations (.deckcraft, .pptx) without a window.
 
 {}
 
 A presentation is edited by running commands on it:
 
-  deckcraft-cli run --cmd 'slide.new={{\"title\":\"Q3 results\"}}' --save q3.deckcraft
+  powerpoint-angero-cli run --cmd 'slide.new={{\"title\":\"Q3 results\"}}' --save q3.deckcraft
 
-`deckcraft-cli help SUBCOMMAND`, or `deckcraft-cli SUBCOMMAND --help`, explains one subcommand;
-`deckcraft-cli help run` explains how to write a command.",
+`powerpoint-angero-cli help SUBCOMMAND`, or `powerpoint-angero-cli SUBCOMMAND --help`, explains one subcommand;
+`powerpoint-angero-cli help run` explains how to write a command.",
         list.join("\n")
     )
 }

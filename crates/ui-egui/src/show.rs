@@ -956,7 +956,7 @@ pub fn ui(app: &mut SlideApp, ui: &mut Ui) {
         painter.text(
             pos2(bar.min.x + 14.0, bar.center().y),
             Align2::LEFT_CENTER,
-            format!("Slide {} of {}", show.state.slide + 1, doc.slides.len()),
+            format!("Slide {} de {}", show.state.slide + 1, doc.slides.len()),
             theme::font(12.0),
             Color32::from_gray(200),
         );
@@ -1756,7 +1756,7 @@ fn presenter_window(ctx: &egui::Context, show: &mut Show, doc: &Presentation, no
     };
     ctx.show_viewport_immediate(
         egui::ViewportId::from_hash_of("deckcraft_presenter"),
-        egui::ViewportBuilder::default().with_title("Presenter View — DeckCraft").with_inner_size([1100.0, 700.0]),
+        egui::ViewportBuilder::default().with_title("Presenter View — PowerPoint").with_inner_size([1100.0, 700.0]),
         |ui, _| {
             if !keyboard(ui.ctx(), show, doc, now) {
                 *keep = false;
@@ -1774,7 +1774,7 @@ fn presenter_window(ctx: &egui::Context, show: &mut Show, doc: &Presentation, no
                     ui.add_space(12.0);
                     ui.label(egui::RichText::new(clock.clone()).size(16.0).color(Color32::from_gray(200)));
                     ui.add_space(20.0);
-                    ui.label(egui::RichText::new(format!("Slide {} of {}", cur + 1, doc.slides.len())).size(16.0).color(Color32::from_gray(200)));
+                    ui.label(egui::RichText::new(format!("Slide {} de {}", cur + 1, doc.slides.len())).size(16.0).color(Color32::from_gray(200)));
                     ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                         if button(ui, "End Show").clicked() {
                             *keep = false;

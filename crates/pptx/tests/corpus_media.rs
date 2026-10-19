@@ -65,7 +65,7 @@ fn corpus() -> (Presentation, Vec<u8>, Vec<u8>, Vec<u8>) {
     let mut diagram = shape(&mut p, "Diagram", 40.0, 80.0, 288.0, 144.0);
     diagram.kind = ShapeKind::Opaque { xml: SMARTART.into(), preview: None, label: "SmartArt".into(), parts: vec![] };
     let mut embedded = shape(&mut p, "Embedded", 340.0, 80.0, 144.0, 72.0);
-    embedded.kind = ShapeKind::Opaque { xml: OLE.into(), preview: None, label: "DeckCraft.Note.1".into(), parts: vec![] };
+    embedded.kind = ShapeKind::Opaque { xml: OLE.into(), preview: None, label: "PowerPoint.Note.1".into(), parts: vec![] };
     let mut block_shape = shape(&mut p, "Block", 40.0, 240.0, 120.0, 90.0);
     block_shape.kind = ShapeKind::Model3d { media: block_id, poster: None };
     let mut globe_shape = shape(&mut p, "Globe", 180.0, 240.0, 160.0, 120.0);
@@ -206,8 +206,8 @@ fn object_corpus_round_trips() {
 
         let embedded = by_name(q, "Embedded");
         let ShapeKind::Opaque { xml, label, .. } = &embedded.kind else { panic!("{:?}", embedded.kind) };
-        assert_eq!(label, "DeckCraft.Note.1");
-        assert!(xml.contains("DeckCraft.Note.1"), "{xml}");
+        assert_eq!(label, "PowerPoint.Note.1");
+        assert!(xml.contains("PowerPoint.Note.1"), "{xml}");
         assert!(!xml.contains("r:id"), "an embedding part is issue #203");
 
         let block_shape = by_name(q, "Block");

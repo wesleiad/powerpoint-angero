@@ -903,10 +903,12 @@ dependencies = [
  "egui",
  "image",
  "log",
+ "memoria-angero",
  "rfd",
  "serde_json",
  "winit",
  "winresource",
+ "zip",
 ]
 
 [[package]]
@@ -1340,8 +1342,6 @@ dependencies = [
 [[package]]
 name = "egui"
 version = "0.36.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dc938cc27cd911415e1e4d151bc56ff9df063d8db081374e87aeb805ea74b2ba"
 dependencies = [
  "accesskit",
  "ahash",
@@ -2581,6 +2581,10 @@ checksum = "488016bfae457b036d996092f6cb448677611ce4449e970ceaf42695203f218a"
 dependencies = [
  "autocfg",
 ]
+
+[[package]]
+name = "memoria-angero"
+version = "0.1.0"
 
 [[package]]
 name = "minicov"

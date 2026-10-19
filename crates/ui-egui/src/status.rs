@@ -15,7 +15,7 @@ pub fn status_bar(app: &mut SlideApp, ui: &mut Ui) {
         let Some(st) = app.session.active() else { return };
         let n = st.doc.slides.len();
         let left = match st.selection.target {
-            deckcraft_engine::Target::Slides => format!("Slide {} of {}", (st.selection.slide + 1).min(n.max(1)), n),
+            deckcraft_engine::Target::Slides => format!("Slide {} de {}", (st.selection.slide + 1).min(n.max(1)), n),
             _ => "Slide Master".to_string(),
         };
         let p = ui.painter();
@@ -100,7 +100,7 @@ fn small_icon(ui: &mut Ui, icon: Icon, tip: &str, on: bool) -> egui::Response {
 
 fn labeled(ui: &mut Ui, icon: Icon, label: &str, on: bool) -> egui::Response {
     let t = Tokens::get(ui.ctx());
-    let w = 22.0 + ui.fonts_mut(|f| f.layout_no_wrap(label.into(), theme::font(12.0), t.text).size().x) + 8.0;
+    let w = 22.0 + ui.fonts_mut(|f| f.layout_no_wrap(egui::traducao::traduzir(label.into()), theme::font(12.0), t.text).size().x) + 8.0;
     let (r, resp) = ui.allocate_exact_size(vec2(w, 20.0), Sense::click());
     if on || resp.hovered() {
         ui.painter().rect_filled(r, CornerRadius::same(4), if on { t.selected } else { t.hover });
