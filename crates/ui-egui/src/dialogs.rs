@@ -1195,8 +1195,8 @@ fn body(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bool {
                 ui.ctx().send_viewport_cmd(egui::ViewportCommand::Close);
                 return true;
             }
-            let what = if names.len() == 1 { format!("“{}”", names[0]) } else { format!("{} presentations", names.len()) };
-            ui.label(egui::RichText::new(format!("Do you want to save the changes you made to {what}?")).strong());
+            let what = if names.len() == 1 { format!("“{}”", names[0]) } else { format!("{} apresentações", names.len()) };
+            ui.label(egui::RichText::new(format!("Deseja salvar as alterações feitas em {what}?")).strong());
             ui.label("Your changes will be lost if you don't save them.");
             ui.add_space(8.0);
             let mut done = false;
