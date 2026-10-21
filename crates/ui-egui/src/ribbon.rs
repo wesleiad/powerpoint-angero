@@ -66,6 +66,7 @@ pub fn title_bar(app: &mut SlideApp, ui: &mut Ui) {
             let max = ui.input(|i| i.viewport().maximized.unwrap_or(false));
             ui.ctx().send_viewport_cmd(egui::ViewportCommand::Maximized(!max));
         }
+        let botoes_janela = crate::janela::botoes(ui, rect, t.text);
         let mut child = ui.new_child(
             egui::UiBuilder::new()
                 .max_rect(Rect::from_min_max(pos2(rect.min.x + left, rect.min.y), pos2(rect.min.x + 420.0, rect.max.y)))
@@ -81,7 +82,7 @@ pub fn title_bar(app: &mut SlideApp, ui: &mut Ui) {
         // Right side.
         let mut right = ui.new_child(
             egui::UiBuilder::new()
-                .max_rect(Rect::from_min_max(pos2(rect.max.x - 320.0, rect.min.y), pos2(rect.max.x - 10.0, rect.max.y)))
+                .max_rect(Rect::from_min_max(pos2(rect.max.x - 320.0 - botoes_janela, rect.min.y), pos2(rect.max.x - 10.0 - botoes_janela, rect.max.y)))
                 .layout(egui::Layout::right_to_left(egui::Align::Center)),
         );
         right.spacing_mut().item_spacing.x = 6.0;
@@ -222,31 +223,39 @@ pub fn show(app: &mut SlideApp, ui: &mut Ui) {
         let mut cui = ui.new_child(egui::UiBuilder::new().max_rect(inner).layout(egui::Layout::left_to_right(egui::Align::Min)));
         cui.set_clip_rect(inner.expand2(vec2(0.0, 3.0)));
         cui.spacing_mut().item_spacing.x = 1.0;
-        let ui = &mut cui;
-        let tab = app.ui.tab.clone();
-        match tab.as_str() {
-            "Home" => home(app, ui),
-            "Insert" => insert(app, ui),
-            "Draw" => draw(app, ui),
-            "Design" => design(app, ui),
-            "Transitions" => transitions(app, ui),
-            "Animations" => animations(app, ui),
-            "Slide Show" => slide_show(app, ui),
-            "Record" => record(app, ui),
-            "Review" => review(app, ui),
-            "View" => view(app, ui),
-            "Shape Format" => shape_format(app, ui),
-            "Picture Format" => picture_format(app, ui),
-            "Table Design" => table_design(app, ui),
-            "Layout" => table_layout(app, ui),
-            "Chart Design" => chart_design(app, ui),
-            "SmartArt Design" => smartart_design(app, ui),
-            "Playback" => playback(app, ui),
-            "Slide Master" => slide_master(app, ui),
-            "Handout Master" => handout_master(app, ui),
-            "Notes Master" => notes_master(app, ui),
-            _ => {}
-        }
+        // Angerô: in a narrow window the Portuguese labels no longer fit, so the ribbon scrolls
+        // sideways (mouse wheel or the thin bar) instead of cutting off the last groups.
+        cui.style_mut().always_scroll_the_only_direction = true;
+        cui.spacing_mut().scroll = egui::style::ScrollStyle::thin();
+        egui::ScrollArea::horizontal().id_salt("ribbon_scroll").auto_shrink([false, false]).show(&mut cui, |ui| {
+            ui.spacing_mut().item_spacing.x = 1.0;
+            ui.horizontal_top(|ui| {
+                let tab = app.ui.tab.clone();
+                match tab.as_str() {
+                    "Home" => home(app, ui),
+                    "Insert" => insert(app, ui),
+                    "Draw" => draw(app, ui),
+                    "Design" => design(app, ui),
+                    "Transitions" => transitions(app, ui),
+                    "Animations" => animations(app, ui),
+                    "Slide Show" => slide_show(app, ui),
+                    "Record" => record(app, ui),
+                    "Review" => review(app, ui),
+                    "View" => view(app, ui),
+                    "Shape Format" => shape_format(app, ui),
+                    "Picture Format" => picture_format(app, ui),
+                    "Table Design" => table_design(app, ui),
+                    "Layout" => table_layout(app, ui),
+                    "Chart Design" => chart_design(app, ui),
+                    "SmartArt Design" => smartart_design(app, ui),
+                    "Playback" => playback(app, ui),
+                    "Slide Master" => slide_master(app, ui),
+                    "Handout Master" => handout_master(app, ui),
+                    "Notes Master" => notes_master(app, ui),
+                    _ => {}
+                }
+            });
+        });
     });
 }
 

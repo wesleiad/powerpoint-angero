@@ -163,7 +163,7 @@ pub fn notes_pane(app: &mut SlideApp, ui: &mut Ui) {
             let r = out.response.response.clone();
             let mut buf = draft.text.clone();
             // Spelling squiggles under misspelt words of the notes.
-            let lang = app.session.active().and_then(|d| d.doc.slides.get(idx)).and_then(|s| notes_lang(s)).unwrap_or_else(|| "en-US".into());
+            let lang = app.session.active().and_then(|d| d.doc.slides.get(idx)).and_then(|s| notes_lang(s)).unwrap_or_else(|| "pt-BR".into());
             let caret = out.cursor_range.map(|c| c.primary.index.0);
             for (a, b) in app.squiggles.notes(&buf, &lang, caret, Some(ui.ctx())) {
                 let (ra, rb) = (out.galley.pos_from_cursor(egui::text::CCursor::new(a)), out.galley.pos_from_cursor(egui::text::CCursor::new(b)));

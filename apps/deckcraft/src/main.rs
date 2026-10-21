@@ -212,7 +212,9 @@ fn main() -> eframe::Result {
             .with_drag_and_drop(true)
             .with_fullsize_content_view(true)
             .with_titlebar_shown(false)
-            .with_title_shown(false),
+            .with_title_shown(false)
+            // Angerô: the app draws its own title bar and window buttons (janela.rs), like Office.
+            .with_decorations(!deckcraft_ui_egui::janela::SEM_BARRA_DO_SISTEMA),
         ..Default::default()
     };
     options.viewport = options.viewport.with_app_id(APP_ID);

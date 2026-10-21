@@ -478,7 +478,9 @@ fn dim(ui: &mut Ui, text: &str) {
 /// A link with an arrow (More themes →): true when clicked.
 fn arrow_link(ui: &mut Ui, text: &str) -> bool {
     let t = Tokens::get(ui.ctx());
-    ui.add(egui::Label::new(RichText::new(format!("{text}  →")).font(theme::font(12.5)).color(t.accent)).sense(Sense::click()))
+    // Angerô: translate before adding the arrow (the dictionary has the bare text); "›" because the
+    // interface font has no "→" (it showed as a box).
+    ui.add(egui::Label::new(RichText::new(format!("{}  ›", egui::traducao::traduzir(text.to_string()))).font(theme::font(12.5)).color(t.accent)).sense(Sense::click()))
         .on_hover_cursor(egui::CursorIcon::PointingHand)
         .clicked()
 }

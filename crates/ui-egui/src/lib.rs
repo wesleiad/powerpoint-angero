@@ -23,6 +23,7 @@ pub mod opening;
 pub mod panes;
 mod preview;
 pub mod qat;
+pub mod janela;
 pub mod ribbon;
 pub mod selpane;
 pub mod settings;

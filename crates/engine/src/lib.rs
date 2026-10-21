@@ -573,7 +573,7 @@ impl Session {
     }
     pub fn next_untitled(&mut self) -> String {
         self.untitled += 1;
-        format!("Presentation{}", self.untitled)
+        format!("Apresentação{}", self.untitled)
     }
 
     /// Run command `id`. A panic inside it becomes [`EngineError::Internal`] and leaves the

@@ -141,18 +141,18 @@ impl PhType {
     /// The prompt shown in an empty placeholder in Normal view.
     pub fn prompt(self) -> &'static str {
         match self {
-            PhType::Title | PhType::CtrTitle => "Click to add title",
-            PhType::SubTitle => "Click to add subtitle",
-            PhType::Body | PhType::Obj => "Click to add text",
-            PhType::Chart => "Click icon to add chart",
-            PhType::Table => "Click icon to add table",
-            PhType::Diagram => "Click icon to add SmartArt graphic",
-            PhType::Media => "Click icon to add media",
-            PhType::Picture | PhType::ClipArt => "Click icon to add picture",
-            PhType::Date => "Date",
-            PhType::Footer => "Footer",
+            PhType::Title | PhType::CtrTitle => "Clique para adicionar um título",
+            PhType::SubTitle => "Clique para adicionar um subtítulo",
+            PhType::Body | PhType::Obj => "Clique para adicionar texto",
+            PhType::Chart => "Clique no ícone para adicionar um gráfico",
+            PhType::Table => "Clique no ícone para adicionar uma tabela",
+            PhType::Diagram => "Clique no ícone para adicionar um elemento gráfico SmartArt",
+            PhType::Media => "Clique no ícone para adicionar mídia",
+            PhType::Picture | PhType::ClipArt => "Clique no ícone para adicionar uma imagem",
+            PhType::Date => "Data",
+            PhType::Footer => "Rodapé",
             PhType::SlideNum => "‹#›",
-            PhType::Header => "Header",
+            PhType::Header => "Cabeçalho",
             PhType::SlideImage => "",
         }
     }
