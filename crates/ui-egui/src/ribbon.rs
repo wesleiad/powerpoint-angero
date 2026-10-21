@@ -55,8 +55,9 @@ fn run(app: &mut SlideApp, id: &str, p: Value) {
 pub fn title_bar(app: &mut SlideApp, ui: &mut Ui) {
     let t = Tokens::get(ui.ctx());
     let (height, left, control_h) = title_geometry(app.integrated_titlebar);
-    egui::Panel::top("title_bar").exact_size(height).frame(egui::Frame::NONE.fill(t.chrome)).show(ui, |ui| {
+    egui::Panel::top("title_bar").show_separator_line(!crate::janela::SEM_BARRA_DO_SISTEMA).exact_size(height).frame(egui::Frame::NONE.fill(t.chrome)).show(ui, |ui| {
         let rect = ui.max_rect();
+        crate::janela::fundo_mica(ui, rect, t.chrome);
         // Dragging the empty title bar moves the window.
         let drag = ui.interact(rect, ui.id().with("titledrag"), Sense::click_and_drag());
         if drag.drag_started() {
@@ -164,6 +165,8 @@ pub fn show(app: &mut SlideApp, ui: &mut Ui) {
     let h = 28.0 + if app.ui.ribbon_collapsed { 4.0 } else { RIBBON_H + 20.0 };
     egui::Panel::top("ribbon").exact_size(h).frame(egui::Frame::NONE.fill(t.chrome)).show(ui, |ui| {
         let rect = ui.max_rect();
+        // Angerô: Mica continues from the title bar behind the tabs and around the ribbon card.
+        crate::janela::fundo_mica(ui, rect, t.chrome);
         // Tabs. File comes first and opens the File tab's full-window view (Backstage), as in
         // PowerPoint.
         let mut x = rect.min.x + 12.0;
