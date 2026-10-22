@@ -53,6 +53,7 @@ fn run(app: &mut SlideApp, id: &str, p: Value) {
 
 /// The window's title row: traffic-light space, quick access, centred title, actions.
 pub fn title_bar(app: &mut SlideApp, ui: &mut Ui) {
+    crate::janela::bordas(ui.ctx());
     let t = Tokens::get(ui.ctx());
     let (height, left, control_h) = title_geometry(app.integrated_titlebar);
     egui::Panel::top("title_bar").show_separator_line(!crate::janela::SEM_BARRA_DO_SISTEMA).exact_size(height).frame(egui::Frame::NONE.fill(t.chrome)).show(ui, |ui| {
