@@ -204,11 +204,12 @@ fn main() -> eframe::Result {
             }
         }
     }
+    let (janela_tam, janela_pos) = janela_inicial(1440.0, 900.0);
     let mut options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
             .with_title("PowerPoint")
-            .with_inner_size([1440.0, 900.0])
-            .with_min_inner_size([900.0, 560.0])
+            .with_inner_size(janela_tam)
+            .with_min_inner_size([janela_tam.x.min(900.0), janela_tam.y.min(560.0)])
             .with_drag_and_drop(true)
             .with_fullsize_content_view(true)
             .with_titlebar_shown(false)
@@ -217,6 +218,9 @@ fn main() -> eframe::Result {
             .with_decorations(!deckcraft_ui_egui::janela::SEM_BARRA_DO_SISTEMA),
         ..Default::default()
     };
+    if let Some(pos) = janela_pos {
+        options.viewport = options.viewport.with_position(pos);
+    }
     options.viewport = options.viewport.with_app_id(APP_ID);
     if let Some(icon) = app_icon() {
         options.viewport = options.viewport.with_icon(icon);
@@ -318,5 +322,17 @@ mod tests {
             assert!(sample);
             assert!(!show);
         }
+    }
+}
+
+/// Office Angerô: tamanho e posição da janela ao abrir, cabendo na área livre da tela e centralizada
+/// (sem isso, em notebooks e telas com zoom de 125-150 % a janela passava da tela e o botão Fechar sumia).
+fn janela_inicial(largura: f32, altura: f32) -> (egui::Vec2, Option<egui::Pos2>) {
+    match memoria_angero::area_trabalho() {
+        Some((x, y, w, h)) => {
+            let tam = egui::vec2(largura.min(w * 0.92), altura.min(h * 0.92));
+            (tam, Some(egui::pos2(x + (w - tam.x) / 2.0, y + (h - tam.y) / 2.0)))
+        }
+        None => (egui::vec2(largura, altura), None),
     }
 }
