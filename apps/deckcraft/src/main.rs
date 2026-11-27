@@ -246,10 +246,23 @@ fn main() -> eframe::Result {
     // Before eframe creates the wgpu instance: default Windows to DirectX 12 with FXC (see graphics.rs).
     #[cfg(target_os = "windows")]
     graphics::configure(&mut options, eframe::wgpu::Backends::from_env(), eframe::wgpu::Dx12Compiler::from_env());
+    // Angerô: modo leve da tela (até 8 GB, até 4 núcleos ou vídeo por software; ver ui-egui leve.rs).
+    let ram = memoria_angero::ram_total();
+    let nucleos = std::thread::available_parallelism().map_or(2, |n| n.get());
+    deckcraft_ui_egui::leve::definir(deckcraft_ui_egui::leve::decidir(ram, nucleos, false));
     eframe::run_native(
         "PowerPoint",
         options,
         Box::new(move |cc| {
+            // Angerô: vídeo por software (WARP, llvmpipe, GDI Generic) também liga o modo leve.
+            if let Some(rs) = &cc.wgpu_render_state {
+                let info = rs.adapter.get_info();
+                let nome = info.name.to_ascii_lowercase();
+                let software = info.device_type == eframe::wgpu::DeviceType::Cpu
+                    || ["llvmpipe", "softpipe", "gdi generic", "basic render"].iter().any(|n| nome.contains(n));
+                deckcraft_ui_egui::leve::definir(deckcraft_ui_egui::leve::decidir(ram, nucleos, software));
+                log::info!("graphics: adapter {:?} ({:?}); modo leve: {}", info.name, info.device_type, deckcraft_ui_egui::leve::ativo());
+            }
             let mut app = SlideApp::new(Session::new(), services());
             load_prefs(&mut app);
             // AutoRecover: reopen what a previous run left unsaved, then keep it current.

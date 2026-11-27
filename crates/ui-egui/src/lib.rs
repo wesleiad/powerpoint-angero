@@ -7,6 +7,7 @@
 #![forbid(unsafe_code)]
 
 pub mod animtimeline;
+pub mod leve;
 pub mod backstage;
 pub mod canvas;
 pub mod control;
@@ -1539,6 +1540,7 @@ impl SlideApp {
 
     /// Per-frame logic before layout: styles, control requests, screenshots, shortcuts.
     pub fn logic(&mut self, ctx: &egui::Context) {
+        leve::aplicar_estilo(ctx);
         let scale = self.ui.ui_scale.clamp(0.5, 3.0);
         if (ctx.zoom_factor() - scale).abs() > 1e-3 {
             ctx.set_zoom_factor(scale);
